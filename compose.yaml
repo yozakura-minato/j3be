@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: 'j3pg'
+    environment:
+      - 'POSTGRES_DB=j3pg'
+      - 'POSTGRES_PASSWORD=password4j3pg'
+      - 'POSTGRES_USER=j3pg'
+      - 'TZ=Asia/Ho_Chi_Minh'
+    ports:
+      - '5432:5432'
+    volumes:
+      - j3pg_data:/var/lib/postgresql
+  redis:
+    image: 'redis:latest'
+    container_name: 'j3rd'
+    environment:
+      - 'TZ=Asia/Ho_Chi_Minh'
+    ports:
+      - '6379:6379'
+    volumes:
+      - j3rd_data:/data
+volumes:
+  j3pg_data:
+  j3rd_data:
