@@ -8,7 +8,7 @@ services:
       - 'POSTGRES_USER=j3pg'
       - 'TZ=Asia/Ho_Chi_Minh'
     ports:
-      - '5432:5432'
+      - '9876:5432'
     volumes:
       - j3pg_data:/var/lib/postgresql
   redis:

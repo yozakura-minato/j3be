@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: j3be
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: j3pg
+    password: password4j3pg
+    url: jdbc:postgresql://localhost:9876/j3pg
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379

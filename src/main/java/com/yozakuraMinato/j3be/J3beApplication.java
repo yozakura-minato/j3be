@@ -10,13 +10,12 @@ public class J3beApplication {
 		SpringApplication.run(J3beApplication.class, args);
 		IO.println("""
 				
-				||==================================||
-				|| APPLICATION STARTED SUCCESSFULLY ||
-				||==================================||
-				|| Application: J3BE                ||
-				|| Running URL: localhost:8080      ||
-				|| Environment: Development         ||
-				||==================================||
+				||=======================================||
+				|| J3BE APPLICATION STARTED SUCCESSFULLY ||
+				||=======================================||
+				|| Running Mode: Development             ||
+				|| API Base URL: http://localhost:8080   ||
+				||=======================================||
 				""");
 	}
 
