@@ -6,13 +6,9 @@ spring:
     username: { YOUR_USERNAME }                             # <-- FILL THIS LINE
     password: { YOUR_PASSWORD }                             # <-- FILL THIS LINE
     url: jdbc:postgresql://localhost:9876/{ YOUR_DATABASE } # <-- FILL THIS LINE
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
   data:
     redis:
       host: localhost
