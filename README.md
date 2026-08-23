@@ -12,7 +12,7 @@
 
 ## Dev Tools
 ![My Skills](https://skillicons.dev/icons?i=idea,gradle,docker)
-- [`IntelliJ IDEAD`](https://www.jetbrains.com/idea/download) (community edition) for IDE
+- [`IntelliJ IDEA`](https://www.jetbrains.com/idea/download) (community edition) for IDE
 - [`Gradle`](https://docs.gradle.org) for dependency management
 - [`Docker`](https://docs.docker.com/get-started) in [`Docker Desktop`](https://docs.docker.com/desktop/setup/install/windows-install) for infra & DevOps
 - Check [`References`](#references) for more details
