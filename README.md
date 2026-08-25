@@ -2,7 +2,7 @@
 
 > **JOHO3** is a web application for **simple** personal workspaces with texts and links.
 >
-> Reference: [`JOHO3 FRONTEND`](https://github.com/yozakura-minato/j3fe)
+> Reference: [`JOHO3 FRONTEND`](https://github.com/yozakura-minato/j3fe) [`Ticket Board`](https://github.com/users/yozakura-minato/projects/5/views/7)
 
 ## Core Techniques
 ![My Skills](https://skillicons.dev/icons?i=spring,java,postgres,redis)
@@ -40,18 +40,18 @@ architecture-beta
 classDiagram
 direction BT
 class contents {
-   uuid id
    uuid user_id
-   varchar(255) title
+   varchar255 title
    text description
    text data
    text type
    text access
    boolean is_deleted
+   uuid id
 }
 class links {
    uuid user_id
-   varchar(255) title
+   varchar255 title
    text description
    text url
    timestampz created_at
@@ -63,7 +63,7 @@ class links {
 }
 class notes {
    uuid user_id
-   varchar(255) title
+   varchar255 title
    text description
    text text
    timestampz created_at
@@ -86,10 +86,10 @@ class page_contents {
 }
 class pages {
    uuid user_id
-   varchar(255) display_path
-   varchar(255) title
+   varchar255 display_path
+   varchar255 title
    text description
-   varchar(255) access
+   varchar255 access
    timestampz created_at
    uuid created_by
    timestampz updated_at
@@ -98,11 +98,11 @@ class pages {
    uuid id
 }
 class users {
-   varchar(255) email
-   varchar(255) hashed_password
-   varchar(255) google_id
-   varchar(255) display_path
-   varchar(255) status
+   varchar255 email
+   varchar255 hashed_password
+   varchar255 google_id
+   varchar255 display_path
+   varchar255 status
    timestampz created_at
    uuid created_by
    timestampz updated_at
