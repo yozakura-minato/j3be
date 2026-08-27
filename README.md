@@ -5,141 +5,157 @@
 > Reference: [`JOHO3 FRONTEND`](https://github.com/yozakura-minato/j3fe) [`Ticket Board`](https://github.com/users/yozakura-minato/projects/5/views/7)
 
 ## Core Techniques
+
 ![My Skills](https://skillicons.dev/icons?i=spring,java,postgres,redis)
+
 - [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) in [`Java`](https://dev.java/learn)
 - [`PostgreSQL`](https://neon.com/postgresql/tutorial) for database, [`Redis`](https://www.tutorialspoint.com/redis/index.htm) for caching
 - Check [`References`](#references) for more details
 
 ## Dev Tools
+
 ![My Skills](https://skillicons.dev/icons?i=idea,gradle,docker)
+
 - [`IntelliJ IDEA`](https://www.jetbrains.com/idea/download) (community edition) for IDE
 - [`Gradle`](https://docs.gradle.org) for dependency management
 - [`Docker`](https://docs.docker.com/get-started) in [`Docker Desktop`](https://docs.docker.com/desktop/setup/install/windows-install) for infra & DevOps
 - Check [`References`](#references) for more details
 
 ## System Architecture Diagram
+
 ```mermaid
 architecture-beta
-    group j3fe(internet)[JOHO3 FRONTEND]
-    group j3be(server)[JOHO3 BACKEND]
+group j3fe(internet)[JOHO3 FRONTEND]
+group j3be(server)[JOHO3 BACKEND]
 
-    service fe(internet)[SvelteKit Client] in j3fe
-    service bff(server)[SvelteKit Server] in j3fe
-    service be(server)[Spring Boot] in j3be
-    service pg(database)[PostgreSQL] in j3be
-    service rd(database)[Redis] in j3be
+service fe(internet)[SvelteKit Client] in j3fe
+service bff(server)[SvelteKit Server] in j3fe
+service be(server)[Spring Boot] in j3be
+service pg(database)[PostgreSQL] in j3be
+service rd(database)[Redis] in j3be
 
-    fe:R <--> L:bff
-    bff:R <--> L:be
-    be:R <--> L:pg
-    be:B <--> T:rd
+fe:R <--> L:bff
+bff:R <--> L:be
+be:R <--> L:pg
+be:B <--> T:rd
 ```
 
 ## Database Schemas
+
 ```mermaid
 classDiagram
-direction BT
-class contents {
-   uuid user_id
-   varchar255 title
-   text description
-   text data
-   text type
-   text access
-   boolean is_deleted
-   uuid id
-}
-class links {
-   uuid user_id
-   varchar255 title
-   text description
-   text url
-   timestampz created_at
-   uuid created_by
-   timestampz updated_at
-   uuid updated_by
-   boolean is_deleted
-   uuid id
-}
-class notes {
-   uuid user_id
-   varchar255 title
-   text description
-   text text
-   timestampz created_at
-   uuid created_by
-   timestampz updated_at
-   uuid updated_by
-   boolean is_deleted
-   uuid id
-}
-class page_contents {
-   uuid user_id
-   bigint index
-   timestampz created_at
-   uuid created_by
-   timestampz updated_at
-   uuid updated_by
-   boolean is_deleted
-   uuid content_id
-   uuid page_id
-}
-class pages {
-   uuid user_id
-   varchar255 display_path
-   varchar255 title
-   text description
-   varchar255 access
-   timestampz created_at
-   uuid created_by
-   timestampz updated_at
-   uuid updated_by
-   boolean is_deleted
-   uuid id
-}
-class users {
-   varchar255 email
-   varchar255 hashed_password
-   varchar255 google_id
-   varchar255 display_path
-   varchar255 status
-   timestampz created_at
-   uuid created_by
-   timestampz updated_at
-   uuid updated_by
-   boolean is_deleted
-   uuid id
-}
-contents  -->  users
-links  -->  users
-notes  -->  users
-page_contents  -->  contents
-page_contents  -->  pages
-page_contents  -->  users
-pages  -->  users 
+    direction BT
+    class contents {
+        uuid user_id
+        varchar255 title
+        text description
+        text data
+        text type
+        text access
+        boolean is_deleted
+        uuid id
+    }
+    class links {
+        uuid user_id
+        varchar255 title
+        text description
+        text url
+        timestampz created_at
+        uuid created_by
+        timestampz updated_at
+        uuid updated_by
+        boolean is_deleted
+        uuid id
+    }
+    class notes {
+        uuid user_id
+        varchar255 title
+        text description
+        text text
+        timestampz created_at
+        uuid created_by
+        timestampz updated_at
+        uuid updated_by
+        boolean is_deleted
+        uuid id
+    }
+    class page_contents {
+        uuid user_id
+        bigint index
+        timestampz created_at
+        uuid created_by
+        timestampz updated_at
+        uuid updated_by
+        boolean is_deleted
+        uuid content_id
+        uuid page_id
+    }
+    class pages {
+        uuid user_id
+        varchar255 display_path
+        varchar255 title
+        text description
+        varchar255 access
+        timestampz created_at
+        uuid created_by
+        timestampz updated_at
+        uuid updated_by
+        boolean is_deleted
+        uuid id
+    }
+    class users {
+        varchar255 email
+        varchar255 hashed_password
+        varchar255 google_id
+        varchar255 display_path
+        varchar255 status
+        timestampz created_at
+        uuid created_by
+        timestampz updated_at
+        uuid updated_by
+        boolean is_deleted
+        uuid id
+    }
+    contents --> users
+    links --> users
+    notes --> users
+    page_contents --> contents
+    page_contents --> pages
+    page_contents --> users
+    pages --> users 
 ```
 
 ## Getting Started
+
 1. Clone this project into your device.
 2. Open your project with `IntelliJ IDEA`.
 3. Download dependencies with **Gradle** in [`build.gradle`](build.gradle).
 4. In `Run/Debug Configurations` dialog, set `Add VM Options` as:
 
 ```
-    -Duser.timezone=Asia/Ho_Chi_Minh
+-Duser.timezone=Asia/Ho_Chi_Minh
 ```
 
 and `Active Profiles` as:
 
 ```
-    dev
+dev
 ```
 
-5. Create  **compose.yaml** file (see [`compose.example.yaml`](compose.example.yaml) for reference)
-6. Create  **application-dev.yaml** file (see [`application-dev.example.yaml`](./src/main/resources/application-dev.example.yaml) for reference)
+5. Create **compose.yaml** file (see [`compose.example.yaml`](compose.example.yaml) for reference)
+6. Create **application-dev.yaml** file (see [
+   `application-dev.example.yaml`](./src/main/resources/application-dev.example.yaml) for reference)
 7. Start **Docker Deamon** by running `Docker Destop`.
 8. Run your local **J3BE**.
 9. Your local **J3FE** is now running at http://localhost:8080.
+```
+||=======================================||
+|| J3BE APPLICATION STARTED SUCCESSFULLY ||
+||=======================================||
+|| Running Mode: Development             ||
+|| API Base URL: http://localhost:8080   ||
+||=======================================||
+```
 
 ---
 

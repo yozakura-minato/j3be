@@ -13,3 +13,6 @@ spring:
     redis:
       host: localhost
       port: 6379
+joho3:
+  persistence:
+    system-id: { YOUR SYSTEM USER ID }                      # <-- FILL THIS LINE
