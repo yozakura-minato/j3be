@@ -11,15 +11,15 @@ services:
       - '9876:5432'
     volumes:
       - { YOUR_POSTGRES_VOLUME_NAME }:/var/lib/postgresql
-  redis:
-    image: 'redis:latest'
-    container_name: '{ YOUR_REDIS_CONTAINER_NAME }'     # <-- FILL THIS LINE
-    environment:
-      - 'TZ=Asia/Ho_Chi_Minh'
-    ports:
-      - '6379:6379'
-    volumes:
-      - { YOUR_REDIS_VOLUME_NAME }:/data                # <-- FILL THIS LINE
+#  redis:
+#    image: 'redis:latest'
+#    container_name: '{ YOUR_REDIS_CONTAINER_NAME }'     # <-- FILL THIS LINE
+#    environment:
+#      - 'TZ=Asia/Ho_Chi_Minh'
+#    ports:
+#      - '6379:6379'
+#    volumes:
+#      - { YOUR_REDIS_VOLUME_NAME }:/data                # <-- FILL THIS LINE
 volumes:
   { YOUR_POSTGRES_VOLUME_NAME }:                        # <-- FILL THIS LINE
-  { YOUR_REDIS_VOLUME_NAME }:                           # <-- FILL THIS LINE
+#  { YOUR_REDIS_VOLUME_NAME }:                           # <-- FILL THIS LINE
