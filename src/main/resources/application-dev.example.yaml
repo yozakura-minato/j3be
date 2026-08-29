@@ -2,14 +2,25 @@ spring:
   application:
     name: j3be
   datasource:
-    driver-class-name: org.postgresql.Driver
     username: { YOUR_USERNAME }                             # <-- FILL THIS LINE
     password: { YOUR_PASSWORD }                             # <-- FILL THIS LINE
     url: jdbc:postgresql://localhost:9876/{ YOUR_DATABASE } # <-- FILL THIS LINE
   flyway:
     enabled: true
     locations: classpath:db/migration
-  data:
-    redis:
-      host: localhost
-      port: 6379
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        orm:
+          jdbc:
+            bind: traceó
