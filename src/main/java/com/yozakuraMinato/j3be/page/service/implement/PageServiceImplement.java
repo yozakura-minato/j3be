@@ -1,5 +1,6 @@
 package com.yozakuraMinato.j3be.page.service.implement;
 
+import com.yozakuraMinato.j3be.common.exception.custom.ResourceAccessDeniedException;
 import com.yozakuraMinato.j3be.common.exception.custom.ResourceConflictException;
 import com.yozakuraMinato.j3be.common.exception.custom.ResourceNotFoundException;
 import com.yozakuraMinato.j3be.page.api.dto.CreatePageRequest;
@@ -7,6 +8,7 @@ import com.yozakuraMinato.j3be.page.api.dto.GetAllPagesResponse;
 import com.yozakuraMinato.j3be.page.api.dto.GetPageByPathRequest;
 import com.yozakuraMinato.j3be.page.api.dto.GetPageResponse;
 import com.yozakuraMinato.j3be.page.model.Page;
+import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.PageRepository;
 import com.yozakuraMinato.j3be.page.repository.projection.PageProfile;
 import com.yozakuraMinato.j3be.page.service.PageApiService;
@@ -77,6 +79,10 @@ public class PageServiceImplement implements PageApiService {
 
         PageProfile pageProfile = pageRepository.getPageProfileByDisplayPathAndUserId(request.page(), hostId)
                 .orElseThrow(() -> new ResourceNotFoundException(PageMessage.DisplayPath.NOT_FOUND));
+
+        if (!PageAccess.PUBLIC.equals(pageProfile.access())) {
+            throw new ResourceAccessDeniedException(PageMessage.Access.DENIED);
+        }
 
         return new GetPageResponse(request.host(), pageProfile, CONTENT_LIST);
     }
