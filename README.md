@@ -178,6 +178,7 @@ docker compose up
 - [`Flyway Migration`](https://docs.spring.io/spring-boot/4.1.0/how-to/data-initialization.html#howto.data-initialization.migration-tool.flyway)
 - [`Spring Data Redis (Access+Driver)`](https://docs.spring.io/spring-boot/4.1.0/reference/data/nosql.html#data.nosql.redis)
 - [`MapStruct`](https://mapstruct.org/documentation/stable/reference/html)
+- [`Common Lang 3`](https://commons.apache.org/proper/commons-lang/)
 
 ## Guides
 
