@@ -8,10 +8,10 @@ insert into users (
     created_by,
     is_deleted
 ) values (
-    '00000000-0000-0000-0000-000000000000',
-    'system@joho3.com',
-    'hashedpassword4system',
-    'system',
+    '11111111-1111-1111-1111-111111111111',
+    'user@joho3.com',
+    'password4user',
+    'user',
     'VALIDATED',
     now(),
     '00000000-0000-0000-0000-000000000000',

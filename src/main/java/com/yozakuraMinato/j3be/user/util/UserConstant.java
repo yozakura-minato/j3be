@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class UserConstant {
     public static class Temporary {
-        public static final UUID USER_ID = new UUID(0L, 0L);
-        public static final UUID HOST_ID = new UUID(0L, 0L);
-        public static final String HOST_PATH = "system";
+        public static final UUID USER_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        public static final UUID HOST_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        public static final String HOST_PATH = "user";
     }
 }
