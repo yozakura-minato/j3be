@@ -17,5 +17,7 @@ public interface PageRepository extends JpaRepository<Page, UUID> {
 
     Optional<PageProfile> getPageProfileByDisplayPathAndUserId(String displayPath, UUID userId);
 
+    Optional<Page> getPageByIdAndUserId(UUID id, UUID userId);
+
     List<PageProfile> getAllPagesByUserId(UUID userId);
 }

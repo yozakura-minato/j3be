@@ -6,6 +6,7 @@ services:
       - 'POSTGRES_DB={ YOUR_DATABASE }'                 # <-- FILL THIS LINE
       - 'POSTGRES_PASSWORD={ YOUR_PASSWORD }'           # <-- FILL THIS LINE
       - 'POSTGRES_USER={ YOUR_USERNAME }'               # <-- FILL THIS LINE
+      - 'POSTGRES_HOST_AUTH_METHOD: md5'
       - 'TZ=Asia/Ho_Chi_Minh'
     ports:
       - '9876:5432'

@@ -1,11 +1,8 @@
-package com.yozakuraMinato.j3be.page.repository.projection;
+package com.yozakuraMinato.j3be.page.api.dto;
 
 import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 
-import java.util.UUID;
-
-public record PageProfile(
-        UUID id,
+public record UpdatePageRequest(
         String displayPath,
         String title,
         String description,
