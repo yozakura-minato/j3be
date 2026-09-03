@@ -3,10 +3,7 @@ package com.yozakuraMinato.j3be.page.service.implement;
 import com.yozakuraMinato.j3be.common.exception.custom.ResourceAccessDeniedException;
 import com.yozakuraMinato.j3be.common.exception.custom.ResourceConflictException;
 import com.yozakuraMinato.j3be.common.exception.custom.ResourceNotFoundException;
-import com.yozakuraMinato.j3be.page.api.dto.CreatePageRequest;
-import com.yozakuraMinato.j3be.page.api.dto.GetAllPagesResponse;
-import com.yozakuraMinato.j3be.page.api.dto.GetPageByPathRequest;
-import com.yozakuraMinato.j3be.page.api.dto.GetPageResponse;
+import com.yozakuraMinato.j3be.page.api.dto.*;
 import com.yozakuraMinato.j3be.page.model.Page;
 import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.PageRepository;
@@ -85,5 +82,16 @@ public class PageServiceImplement implements PageApiService {
         }
 
         return new GetPageResponse(request.host(), pageProfile, CONTENT_LIST);
+    }
+
+    @Transactional
+    @Override
+    public void updatePage(UUID pageId, UpdatePageRequest request, UUID userId) {
+        Page existsPage = pageRepository.getPageByIdAndUserId(pageId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException(PageMessage.Id.NOT_FOUND));
+
+        pageMapper.updatePageFromUpdatePageRequest(request, existsPage);
+        existsPage.setUpdatedAt(Instant.now());
+        existsPage.setUpdatedBy(userId);
     }
 }

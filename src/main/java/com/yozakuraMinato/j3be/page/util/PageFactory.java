@@ -3,6 +3,7 @@ package com.yozakuraMinato.j3be.page.util;
 import com.yozakuraMinato.j3be.common.util.CommonFactory;
 import com.yozakuraMinato.j3be.page.api.dto.CreatePageRequest;
 import com.yozakuraMinato.j3be.page.api.dto.GetPageByPathRequest;
+import com.yozakuraMinato.j3be.page.api.dto.UpdatePageRequest;
 import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.projection.PageProfile;
 
@@ -32,6 +33,15 @@ public class PageFactory {
         return new GetPageByPathRequest(
                 CommonFactory.string(),
                 CommonFactory.string()
+        );
+    }
+
+    public static UpdatePageRequest updatePageRequest(PageAccess pageAccess) {
+        return new UpdatePageRequest(
+                CommonFactory.string(),
+                CommonFactory.string(),
+                CommonFactory.string(),
+                pageAccess
         );
     }
 }

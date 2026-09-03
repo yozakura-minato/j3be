@@ -1,9 +1,6 @@
 package com.yozakuraMinato.j3be.page.service;
 
-import com.yozakuraMinato.j3be.page.api.dto.CreatePageRequest;
-import com.yozakuraMinato.j3be.page.api.dto.GetAllPagesResponse;
-import com.yozakuraMinato.j3be.page.api.dto.GetPageByPathRequest;
-import com.yozakuraMinato.j3be.page.api.dto.GetPageResponse;
+import com.yozakuraMinato.j3be.page.api.dto.*;
 
 import java.util.UUID;
 
@@ -14,5 +11,8 @@ public interface PageApiService {
 
     GetAllPagesResponse getAllPages(UUID userId);
 
+    // TODO: Rewrite this method using view repository
     GetPageResponse getPageByPath(GetPageByPathRequest request);
+
+    void updatePage(UUID pageId, UpdatePageRequest request, UUID userId);
 }
