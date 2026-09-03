@@ -22,5 +22,5 @@ services:
 #    volumes:
 #      - { YOUR_REDIS_VOLUME_NAME }:/data                # <-- FILL THIS LINE
 volumes:
-  { YOUR_POSTGRES_VOLUME_NAME }: # <-- FILL THIS LINE
+  { YOUR_POSTGRES_VOLUME_NAME }:                        # <-- FILL THIS LINE
 #  { YOUR_REDIS_VOLUME_NAME }:                           # <-- FILL THIS LINE

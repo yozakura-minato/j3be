@@ -143,11 +143,17 @@ dev
 ```
 
 5. Create **compose.yaml** file (see [`compose.example.yaml`](compose.example.yaml) for reference)
-6. Create **application-dev.yaml** file (see [
-   `application-dev.example.yaml`](./src/main/resources/application-dev.example.yaml) for reference)
+6. Create **application-dev.yaml** file (see [`application-dev.example.yaml`](src/main/resources/application-dev.example.yaml) for reference)
 7. Start **Docker Deamon** by running `Docker Destop`.
-8. Run your local **J3BE**.
-9. Your local **J3FE** is now running at http://localhost:8080.
+8. Start **Docker containers**.
+
+```shell
+docker compose up
+```
+
+9. Run your local **J3BE**.
+10. Your local **J3FE** is now running at http://localhost:8080.
+
 ```
 ||=======================================||
 || J3BE APPLICATION STARTED SUCCESSFULLY ||
@@ -163,7 +169,6 @@ dev
 
 ## Dependencies
 
-- [`Docker Compose Support`](https://docs.spring.io/spring-boot/4.1.0/reference/features/dev-services.html#features.dev-services.docker-compose)
 - [`Spring Modulith`](https://docs.spring.io/spring-modulith/reference/)
 - [`Spring Web`](https://docs.spring.io/spring-boot/4.1.0/reference/web/servlet.html)
 - [`Spring HATEOAS`](https://docs.spring.io/spring-boot/4.1.0/reference/web/spring-hateoas.html)

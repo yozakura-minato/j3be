@@ -32,7 +32,7 @@ dependencies {
 
     // DATABASE & CACHE
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     runtimeOnly 'org.postgresql:postgresql'
 
     // MIGRATION
@@ -51,9 +51,6 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
     implementation 'org.apache.commons:commons-lang3:3.20.0'
-
-    // COMPOSE
-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
     // TESTING
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
