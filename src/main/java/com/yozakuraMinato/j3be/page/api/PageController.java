@@ -50,4 +50,10 @@ public class PageController {
         UUID userId = UserConstant.Temporary.USER_ID;
         pageApiService.updatePage(pageId, request, userId);
     }
+
+    @DeleteMapping(path = "/{pageId}")
+    public void softDeletePage(@PathVariable UUID pageId) {
+        UUID userId = UserConstant.Temporary.HOST_ID;
+        pageApiService.softDeletePage(pageId, userId);
+    }
 }

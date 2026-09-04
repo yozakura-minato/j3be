@@ -64,9 +64,11 @@ class PageServiceImplementTest {
             );
 
             // Assert
+            verify(pageRepository, times(1)).existsByDisplayPath(mockRequest.displayPath());
+
             assertEquals(PageMessage.DisplayPath.CONFLICT, exception.getMessage());
 
-            verify(pageRepository, never()).save(any());
+            verify(pageRepository, never()).save(any(Page.class));
         }
 
         @Test
@@ -122,6 +124,8 @@ class PageServiceImplementTest {
             );
 
             // Assert
+            verify(pageRepository, times(1)).getPageProfileByIdAndUserId(mockPageId, mockUserId);
+
             assertEquals(PageMessage.Id.NOT_FOUND, exception.getMessage());
         }
 
@@ -140,6 +144,8 @@ class PageServiceImplementTest {
             var response = pageService.getPageById(mockPageId, mockUserId);
 
             // Assert
+            verify(pageRepository, times(1)).getPageProfileByIdAndUserId(mockPageId, mockUserId);
+
             assertEquals(mockPageProfile, response.pageProfile());
         }
     }
@@ -161,6 +167,8 @@ class PageServiceImplementTest {
             var response = pageService.getAllPages(mockUserId);
 
             // Assert
+            verify(pageRepository, times(1)).getAllPagesByUserId(mockUserId);
+
             assertEquals(List.of(mockPageProfile), response.pageProfiles());
         }
     }
@@ -184,9 +192,11 @@ class PageServiceImplementTest {
             );
 
             //Assert
+            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
+
             assertEquals(UserMessage.DisplayPath.NOT_FOUND, exception.getMessage());
 
-            verify(pageRepository, never()).getPageProfileByDisplayPathAndUserId(any(), any());
+            verify(pageRepository, never()).getPageProfileByDisplayPathAndUserId(any(String.class), any(UUID.class));
         }
 
         @Test
@@ -209,6 +219,11 @@ class PageServiceImplementTest {
             );
 
             // Assert
+            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
+            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndUserId(
+                    mockRequest.page(), mockHostId
+            );
+
             assertEquals(PageMessage.DisplayPath.NOT_FOUND, exception.getMessage());
         }
 
@@ -233,6 +248,11 @@ class PageServiceImplementTest {
             );
 
             // Assert
+            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
+            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndUserId(
+                    mockRequest.page(), mockHostId
+            );
+
             assertEquals(PageMessage.Access.DENIED, exception.getMessage());
         }
 
@@ -254,6 +274,11 @@ class PageServiceImplementTest {
             var response = pageService.getPageByPath(mockRequest);
 
             // Assert
+            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
+            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndUserId(
+                    mockRequest.page(), mockHostId
+            );
+
             assertEquals(mockPageProfile, response.pageProfile());
         }
     }
@@ -279,6 +304,8 @@ class PageServiceImplementTest {
             );
 
             // Assert
+            verify(pageRepository, times(1)).getPageByIdAndUserId(mockPageId, mockUserId);
+
             assertEquals(PageMessage.Id.NOT_FOUND, exception.getMessage());
         }
 
@@ -300,12 +327,61 @@ class PageServiceImplementTest {
             pageService.updatePage(mockPageId, mockRequest, mockUserId);
 
             // Assert
+            verify(pageRepository, times(1)).getPageByIdAndUserId(mockPageId, mockUserId);
+
             assertNotNull(mockExistsPage.getUpdatedAt());
             assertTrue(
                     beforeUpdate.isBefore(mockExistsPage.getUpdatedAt())
                             || beforeUpdate.equals(mockExistsPage.getUpdatedAt())
             );
             assertEquals(mockUserId, mockExistsPage.getUpdatedBy());
+        }
+    }
+
+    @Nested
+    @DisplayName(value = "Test for: softDeletePage")
+    class SoftDeletePageTest {
+        @Test
+        @DisplayName(value = "Scenario 1: SHOULD throw exception WHEN page ID not found")
+        void softDeletePage_pageIdNotFound() {
+            // Arrange
+            var mockPageId = UUID.randomUUID();
+            var mockUserId = UUID.randomUUID();
+
+            when(pageRepository.softDeletePage(eq(mockPageId), eq(mockUserId), any(Instant.class), eq(mockUserId)))
+                    .thenReturn(0);
+
+            // Act
+            var exception = assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> pageService.softDeletePage(mockPageId, mockUserId)
+            );
+
+            // Assert
+            verify(pageRepository, times(1)).softDeletePage(
+                    eq(mockPageId), eq(mockUserId), any(Instant.class), eq(mockUserId)
+            );
+
+            assertEquals(PageMessage.Id.NOT_FOUND, exception.getMessage());
+        }
+
+        @Test
+        @DisplayName(value = "SHOULD success WHEN iDs is valid")
+        void softDeletePage_success() {
+            // Arrange
+            var mockPageId = UUID.randomUUID();
+            var mockUserId = UUID.randomUUID();
+
+            when(pageRepository.softDeletePage(eq(mockPageId), eq(mockUserId), any(Instant.class), eq(mockUserId)))
+                    .thenReturn(1);
+
+            // Act
+            pageService.softDeletePage(mockPageId, mockUserId);
+
+            // Assert
+            verify(pageRepository, times(1)).softDeletePage(
+                    eq(mockPageId), eq(mockUserId), any(Instant.class), eq(mockUserId)
+            );
         }
     }
 }

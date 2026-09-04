@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PageServiceImplement implements PageApiService {
     private final PageRepository pageRepository;
@@ -93,5 +94,14 @@ public class PageServiceImplement implements PageApiService {
         pageMapper.updatePageFromUpdatePageRequest(request, existsPage);
         existsPage.setUpdatedAt(Instant.now());
         existsPage.setUpdatedBy(userId);
+    }
+
+    @Transactional
+    @Override
+    public void softDeletePage(UUID pageId, UUID userId) {
+        int affectedPage = pageRepository.softDeletePage(pageId, userId, Instant.now(), userId);
+        if (affectedPage == 0) {
+            throw new ResourceNotFoundException(PageMessage.Id.NOT_FOUND);
+        }
     }
 }

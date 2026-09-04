@@ -15,4 +15,6 @@ public interface PageApiService {
     GetPageResponse getPageByPath(GetPageByPathRequest request);
 
     void updatePage(UUID pageId, UpdatePageRequest request, UUID userId);
+
+    void softDeletePage(UUID pageId, UUID userId);
 }
