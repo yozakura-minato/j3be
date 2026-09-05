@@ -1,9 +1,10 @@
 package com.yozakuraMinato.j3be.page.util;
 
 import com.yozakuraMinato.j3be.common.util.CommonFactory;
-import com.yozakuraMinato.j3be.page.api.dto.CreatePageRequest;
-import com.yozakuraMinato.j3be.page.api.dto.GetPageByPathRequest;
-import com.yozakuraMinato.j3be.page.api.dto.UpdatePageRequest;
+import com.yozakuraMinato.j3be.page.api.request.CreatePageRequest;
+import com.yozakuraMinato.j3be.page.api.request.GetAllPagesByPathRequest;
+import com.yozakuraMinato.j3be.page.api.request.GetPageByPathRequest;
+import com.yozakuraMinato.j3be.page.api.request.UpdatePageRequest;
 import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.projection.PageProfile;
 
@@ -32,6 +33,12 @@ public class PageFactory {
     public static GetPageByPathRequest getPageByPathRequest() {
         return new GetPageByPathRequest(
                 CommonFactory.string(),
+                CommonFactory.string()
+        );
+    }
+
+    public static GetAllPagesByPathRequest getAllPagesByPathRequest() {
+        return new GetAllPagesByPathRequest(
                 CommonFactory.string()
         );
     }

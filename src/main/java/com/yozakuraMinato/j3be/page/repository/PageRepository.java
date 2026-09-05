@@ -1,6 +1,7 @@
 package com.yozakuraMinato.j3be.page.repository;
 
 import com.yozakuraMinato.j3be.page.model.Page;
+import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.projection.PageProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,11 +19,15 @@ public interface PageRepository extends JpaRepository<Page, UUID> {
 
     Optional<PageProfile> getPageProfileByIdAndUserId(UUID id, UUID userId);
 
-    Optional<PageProfile> getPageProfileByDisplayPathAndUserId(String displayPath, UUID userId);
+    Optional<PageProfile> getPageProfileByDisplayPathAndAccessAndUserId(
+            String displayPath, PageAccess access, UUID userId
+    );
 
     Optional<Page> getPageByIdAndUserId(UUID id, UUID userId);
 
     List<PageProfile> getAllPagesByUserId(UUID userId);
+
+    List<PageProfile> getAllPageProfilesByAccessAndUserId(PageAccess access, UUID userId);
 
     @Modifying
     @Query(value = """

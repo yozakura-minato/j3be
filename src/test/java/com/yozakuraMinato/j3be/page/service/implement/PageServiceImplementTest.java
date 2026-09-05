@@ -1,8 +1,7 @@
 package com.yozakuraMinato.j3be.page.service.implement;
 
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceAccessDeniedException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceConflictException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceNotFoundException;
+import com.yozakuraMinato.j3be.common.exception.ResourceConflictException;
+import com.yozakuraMinato.j3be.common.exception.ResourceNotFoundException;
 import com.yozakuraMinato.j3be.page.model.Page;
 import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.PageRepository;
@@ -46,10 +45,10 @@ class PageServiceImplementTest {
 
     @Nested
     @DisplayName(value = "Test for: createPage")
-    class CreateOfPageTest {
+    class CreatePageTest {
         @Test
         @DisplayName(value = "Scenario 1: SHOULD throw exception WHEN displayPath is conflicts")
-        void createPage_DisplayPathConflict() {
+        void createPage_displayPathConflict() {
             // Arrange
             var mockRequest = PageFactory.createPageRequest(PageAccess.PUBLIC);
             var mockUserId = UUID.randomUUID();
@@ -73,7 +72,7 @@ class PageServiceImplementTest {
 
         @Test
         @DisplayName(value = "Scenario 2: SHOULD map and save WHEN request is valid")
-        void createPage_Success() {
+        void createPage_success() {
             // Arrange
             var mockRequest = PageFactory.createPageRequest(PageAccess.PUBLIC);
             var mockUserId = UUID.randomUUID();
@@ -106,10 +105,10 @@ class PageServiceImplementTest {
 
     @Nested
     @DisplayName(value = "Test for: getPageById")
-    class GetOfPageByIdTest {
+    class GetPageByIdTest {
         @Test
         @DisplayName(value = "Scenario 1: SHOULD throw exception WHEN page ID not found")
-        void getPageById_PageIdNotFound() {
+        void getPageById_pageIdNotFound() {
             // Arrange
             var mockPageId = UUID.randomUUID();
             var mockUserId = UUID.randomUUID();
@@ -131,7 +130,7 @@ class PageServiceImplementTest {
 
         @Test
         @DisplayName(value = "Scenario 2: SHOULD return page data WHEN page ID is exists")
-        void getPageId_success() {
+        void getPageById_success() {
             // Arrange
             var mockPageId = UUID.randomUUID();
             var mockUserId = UUID.randomUUID();
@@ -152,10 +151,10 @@ class PageServiceImplementTest {
 
     @Nested
     @DisplayName(value = "Test for: getAllPages")
-    class GetAllPageTest {
+    class GetAllPagesTest {
         @Test
         @DisplayName(value = "Scenario 1: SHOULD return page data list WHEN called")
-        void getAllPage_success() {
+        void getAllPages_success() {
             // Arrange
             var mockUserId = UUID.randomUUID();
 
@@ -174,7 +173,7 @@ class PageServiceImplementTest {
     }
 
     @Nested
-    @DisplayName(value = "Test for: getPageByPath")
+    @DisplayName(value = "Test for: getPublicPageByPath")
     class GetPageByPathTest {
         @Test
         @DisplayName(value = "Scenario 1: SHOULD throw exception WHEN host path not found")
@@ -196,7 +195,9 @@ class PageServiceImplementTest {
 
             assertEquals(UserMessage.DisplayPath.NOT_FOUND, exception.getMessage());
 
-            verify(pageRepository, never()).getPageProfileByDisplayPathAndUserId(any(String.class), any(UUID.class));
+            verify(pageRepository, never()).getPageProfileByDisplayPathAndAccessAndUserId(
+                    anyString(), any(PageAccess.class), any(UUID.class)
+            );
         }
 
         @Test
@@ -209,8 +210,9 @@ class PageServiceImplementTest {
             when(userModuleService.getHostIdByHostPath(mockRequest.host()))
                     .thenReturn(Optional.of(mockHostId));
 
-            when(pageRepository.getPageProfileByDisplayPathAndUserId(mockRequest.page(), mockHostId))
-                    .thenReturn(Optional.empty());
+            when(pageRepository.getPageProfileByDisplayPathAndAccessAndUserId(
+                    mockRequest.page(), PageAccess.PUBLIC, mockHostId
+            )).thenReturn(Optional.empty());
 
             // Act
             var exception = assertThrows(
@@ -220,44 +222,15 @@ class PageServiceImplementTest {
 
             // Assert
             verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
-            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndUserId(
-                    mockRequest.page(), mockHostId
+            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndAccessAndUserId(
+                    mockRequest.page(), PageAccess.PUBLIC, mockHostId
             );
 
             assertEquals(PageMessage.DisplayPath.NOT_FOUND, exception.getMessage());
         }
 
         @Test
-        @DisplayName(value = "Scenario 3: SHOULD throw exception WHEN page access is not Public")
-        void getPageByPath_accessIsNotPublic() {
-            // Arrange
-            var mockRequest = PageFactory.getPageByPathRequest();
-
-            var mockHostId = UUID.randomUUID();
-            when(userModuleService.getHostIdByHostPath(mockRequest.host()))
-                    .thenReturn(Optional.of(mockHostId));
-
-            var mockPageProfile = PageFactory.pageProfile(PageAccess.PRIVATE);
-            when(pageRepository.getPageProfileByDisplayPathAndUserId(mockRequest.page(), mockHostId))
-                    .thenReturn(Optional.of(mockPageProfile));
-
-            // Act
-            var exception = assertThrows(
-                    ResourceAccessDeniedException.class,
-                    () -> pageService.getPageByPath(mockRequest)
-            );
-
-            // Assert
-            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
-            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndUserId(
-                    mockRequest.page(), mockHostId
-            );
-
-            assertEquals(PageMessage.Access.DENIED, exception.getMessage());
-        }
-
-        @Test
-        @DisplayName(value = "Scenario 4: SHOULD return data WHEN request is valid")
+        @DisplayName(value = "Scenario 3: SHOULD return data WHEN request is valid")
         void getPageByPath_success() {
             // Arrange
             var mockRequest = PageFactory.getPageByPathRequest();
@@ -267,19 +240,76 @@ class PageServiceImplementTest {
                     .thenReturn(Optional.of(mockHostId));
 
             var mockPageProfile = PageFactory.pageProfile(PageAccess.PUBLIC);
-            when(pageRepository.getPageProfileByDisplayPathAndUserId(mockRequest.page(), mockHostId))
-                    .thenReturn(Optional.of(mockPageProfile));
+            when(pageRepository.getPageProfileByDisplayPathAndAccessAndUserId(
+                    mockRequest.page(), PageAccess.PUBLIC, mockHostId
+            )).thenReturn(Optional.of(mockPageProfile));
 
             // Act
             var response = pageService.getPageByPath(mockRequest);
 
             // Assert
             verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
-            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndUserId(
-                    mockRequest.page(), mockHostId
+            verify(pageRepository, times(1)).getPageProfileByDisplayPathAndAccessAndUserId(
+                    mockRequest.page(), PageAccess.PUBLIC, mockHostId
             );
 
             assertEquals(mockPageProfile, response.pageProfile());
+        }
+    }
+
+    @Nested
+    @DisplayName(value = "Test for: getAllPagesByPath")
+    class GetAllPagesByPathTest {
+        @Test
+        @DisplayName(value = "Scenario 1: SHOULD throw exception WHEN host path not found")
+        void getAllPagesByPath_hostPathNotFound() {
+            // Arrange
+            var mockRequest = PageFactory.getAllPagesByPathRequest();
+
+            when(userModuleService.getHostIdByHostPath(mockRequest.host()))
+                    .thenReturn(Optional.empty());
+
+            // Act
+            var exception = assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> pageService.getAllPagesByPath(mockRequest)
+            );
+
+            // Assert
+            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
+
+            assertEquals(UserMessage.DisplayPath.NOT_FOUND, exception.getMessage());
+
+            verify(pageRepository, never()).getAllPageProfilesByAccessAndUserId(
+                    any(PageAccess.class), any(UUID.class)
+            );
+        }
+
+        @Test
+        @DisplayName(value = "Scenario 2: SHOULD return data WHEN request is valid")
+        void getAllPagesByPath_success() {
+            // Arrange
+            var mockRequest = PageFactory.getAllPagesByPathRequest();
+
+            var mockUserId = UUID.randomUUID();
+            when(userModuleService.getHostIdByHostPath(mockRequest.host()))
+                    .thenReturn(Optional.of(mockUserId));
+
+            var mockPageProfiles = List.of(PageFactory.pageProfile(PageAccess.PUBLIC));
+            when(pageRepository.getAllPageProfilesByAccessAndUserId(PageAccess.PUBLIC, mockUserId))
+                    .thenReturn(mockPageProfiles);
+
+            // Act
+            var response = pageService.getAllPagesByPath(mockRequest);
+
+            // Assert
+            verify(userModuleService, times(1)).getHostIdByHostPath(mockRequest.host());
+            verify(pageRepository, times(1)).getAllPageProfilesByAccessAndUserId(
+                    PageAccess.PUBLIC, mockUserId
+            );
+
+            assertEquals(mockRequest.host(), response.hostPath());
+            assertEquals(mockPageProfiles, response.pageProfiles());
         }
     }
 

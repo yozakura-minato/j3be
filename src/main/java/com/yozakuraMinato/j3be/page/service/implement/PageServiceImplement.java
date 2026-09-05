@@ -1,9 +1,13 @@
 package com.yozakuraMinato.j3be.page.service.implement;
 
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceAccessDeniedException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceConflictException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceNotFoundException;
-import com.yozakuraMinato.j3be.page.api.dto.*;
+import com.yozakuraMinato.j3be.common.exception.ResourceConflictException;
+import com.yozakuraMinato.j3be.common.exception.ResourceNotFoundException;
+import com.yozakuraMinato.j3be.page.api.request.CreatePageRequest;
+import com.yozakuraMinato.j3be.page.api.request.GetAllPagesByPathRequest;
+import com.yozakuraMinato.j3be.page.api.request.GetPageByPathRequest;
+import com.yozakuraMinato.j3be.page.api.request.UpdatePageRequest;
+import com.yozakuraMinato.j3be.page.api.response.GetAllPageProfilesResponse;
+import com.yozakuraMinato.j3be.page.api.response.GetPageResponse;
 import com.yozakuraMinato.j3be.page.model.Page;
 import com.yozakuraMinato.j3be.page.model.type.PageAccess;
 import com.yozakuraMinato.j3be.page.repository.PageRepository;
@@ -12,6 +16,7 @@ import com.yozakuraMinato.j3be.page.service.PageApiService;
 import com.yozakuraMinato.j3be.page.util.PageMapper;
 import com.yozakuraMinato.j3be.page.util.PageMessage;
 import com.yozakuraMinato.j3be.user.service.UserModuleService;
+import com.yozakuraMinato.j3be.user.util.UserConstant;
 import com.yozakuraMinato.j3be.user.util.UserMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +34,6 @@ public class PageServiceImplement implements PageApiService {
     private final PageMapper pageMapper;
     private final UserModuleService userModuleService;
 
-    private static final String HOST_PATH = "system";
     private static final List<String> CONTENT_LIST = List.of(
             "Test page content 1",
             "Test page content 2",
@@ -60,14 +64,14 @@ public class PageServiceImplement implements PageApiService {
         PageProfile pageProfile = pageRepository.getPageProfileByIdAndUserId(pageId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException(PageMessage.Id.NOT_FOUND));
 
-        return new GetPageResponse(HOST_PATH, pageProfile, CONTENT_LIST);
+        return new GetPageResponse(UserConstant.Temporary.HOST_PATH, pageProfile, CONTENT_LIST);
     }
 
     @Override
-    public GetAllPagesResponse getAllPages(UUID userId) {
+    public GetAllPageProfilesResponse getAllPages(UUID userId) {
         List<PageProfile> pageProfiles = pageRepository.getAllPagesByUserId(userId);
 
-        return new GetAllPagesResponse(HOST_PATH, pageProfiles, CONTENT_LIST);
+        return new GetAllPageProfilesResponse(UserConstant.Temporary.HOST_PATH, pageProfiles);
     }
 
     @Override
@@ -75,14 +79,21 @@ public class PageServiceImplement implements PageApiService {
         UUID hostId = userModuleService.getHostIdByHostPath(request.host())
                 .orElseThrow(() -> new ResourceNotFoundException(UserMessage.DisplayPath.NOT_FOUND));
 
-        PageProfile pageProfile = pageRepository.getPageProfileByDisplayPathAndUserId(request.page(), hostId)
-                .orElseThrow(() -> new ResourceNotFoundException(PageMessage.DisplayPath.NOT_FOUND));
-
-        if (!PageAccess.PUBLIC.equals(pageProfile.access())) {
-            throw new ResourceAccessDeniedException(PageMessage.Access.DENIED);
-        }
+        PageProfile pageProfile = pageRepository.getPageProfileByDisplayPathAndAccessAndUserId(
+                request.page(), PageAccess.PUBLIC, hostId
+        ).orElseThrow(() -> new ResourceNotFoundException(PageMessage.DisplayPath.NOT_FOUND));
 
         return new GetPageResponse(request.host(), pageProfile, CONTENT_LIST);
+    }
+
+    @Override
+    public GetAllPageProfilesResponse getAllPagesByPath(GetAllPagesByPathRequest request) {
+        UUID hostId = userModuleService.getHostIdByHostPath(request.host())
+                .orElseThrow(() -> new ResourceNotFoundException(UserMessage.DisplayPath.NOT_FOUND));
+
+        List<PageProfile> pageProfiles = pageRepository.getAllPageProfilesByAccessAndUserId(PageAccess.PUBLIC, hostId);
+
+        return new GetAllPageProfilesResponse(request.host(), pageProfiles);
     }
 
     @Transactional

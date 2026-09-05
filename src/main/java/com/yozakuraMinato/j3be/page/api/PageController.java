@@ -1,7 +1,12 @@
 package com.yozakuraMinato.j3be.page.api;
 
 import com.yozakuraMinato.j3be.common.dto.ApiResponse;
-import com.yozakuraMinato.j3be.page.api.dto.*;
+import com.yozakuraMinato.j3be.page.api.request.CreatePageRequest;
+import com.yozakuraMinato.j3be.page.api.request.GetAllPagesByPathRequest;
+import com.yozakuraMinato.j3be.page.api.request.GetPageByPathRequest;
+import com.yozakuraMinato.j3be.page.api.request.UpdatePageRequest;
+import com.yozakuraMinato.j3be.page.api.response.GetAllPageProfilesResponse;
+import com.yozakuraMinato.j3be.page.api.response.GetPageResponse;
 import com.yozakuraMinato.j3be.page.service.PageApiService;
 import com.yozakuraMinato.j3be.user.util.UserConstant;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +33,31 @@ public class PageController {
     public ResponseEntity<ApiResponse<GetPageResponse>> getPageById(@PathVariable UUID pageId) {
         UUID userId = UserConstant.Temporary.USER_ID;
         GetPageResponse response = pageApiService.getPageById(pageId, userId);
+
         return ResponseEntity.ok(ApiResponse.data(response));
     }
 
     @GetMapping(path = "/all")
-    public ResponseEntity<ApiResponse<GetAllPagesResponse>> getAllPages() {
+    public ResponseEntity<ApiResponse<GetAllPageProfilesResponse>> getAllPages() {
         UUID userId = UserConstant.Temporary.USER_ID;
-        GetAllPagesResponse response = pageApiService.getAllPages(userId);
+        GetAllPageProfilesResponse response = pageApiService.getAllPages(userId);
+
         return ResponseEntity.ok(ApiResponse.data(response));
     }
 
-    // Public API
-    @GetMapping()
-    public ResponseEntity<ApiResponse<GetPageResponse>> getPageByPath(@ModelAttribute GetPageByPathRequest request) {
+    @GetMapping(path = "/public")
+    public ResponseEntity<ApiResponse<GetPageResponse>> getPublicPageByPath(@ModelAttribute GetPageByPathRequest request) {
         GetPageResponse response = pageApiService.getPageByPath(request);
+
+        return ResponseEntity.ok(ApiResponse.data(response));
+    }
+
+    @GetMapping(path = "/all/public")
+    public ResponseEntity<ApiResponse<GetAllPageProfilesResponse>> getAllPublicPagesByPath(
+            @ModelAttribute GetAllPagesByPathRequest request
+    ) {
+        GetAllPageProfilesResponse response = pageApiService.getAllPagesByPath(request);
+
         return ResponseEntity.ok(ApiResponse.data(response));
     }
 
