@@ -1,8 +1,8 @@
 package com.yozakuraMinato.j3be.page.util;
 
 import com.yozakuraMinato.j3be.common.annotation.IgnoreIdAndAuditFields;
-import com.yozakuraMinato.j3be.page.api.dto.CreatePageRequest;
-import com.yozakuraMinato.j3be.page.api.dto.UpdatePageRequest;
+import com.yozakuraMinato.j3be.page.api.request.CreatePageRequest;
+import com.yozakuraMinato.j3be.page.api.request.UpdatePageRequest;
 import com.yozakuraMinato.j3be.page.model.Page;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

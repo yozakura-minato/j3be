@@ -8,10 +8,6 @@ public class PageMessage {
 
     public static class DisplayPath {
         public static final String CONFLICT = "page.displayPath.conflict";
-        public static final String NOT_FOUND = "page.displayPath.conflict";
-    }
-
-    public static class Access {
-        public static final String DENIED = "page.access.denied";
+        public static final String NOT_FOUND = "page.displayPath.notFound";
     }
 }
