@@ -1,4 +1,4 @@
-package com.yozakuraMinato.j3be.common.exception.custom;
+package com.yozakuraMinato.j3be.common.exception;
 
 public class ResourceConflictException extends RuntimeException {
     public ResourceConflictException(String message) {

@@ -1,10 +1,9 @@
-package com.yozakuraMinato.j3be.common.exception;
+package com.yozakuraMinato.j3be.common.exception.handler;
 
 import com.yozakuraMinato.j3be.common.dto.ApiResponse;
-import com.yozakuraMinato.j3be.common.exception.custom.BusinessRuleException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceAccessDeniedException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceConflictException;
-import com.yozakuraMinato.j3be.common.exception.custom.ResourceNotFoundException;
+import com.yozakuraMinato.j3be.common.exception.BusinessRuleException;
+import com.yozakuraMinato.j3be.common.exception.ResourceConflictException;
+import com.yozakuraMinato.j3be.common.exception.ResourceNotFoundException;
 import com.yozakuraMinato.j3be.common.util.CommonMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,14 +27,6 @@ public class GeneralExceptionHandler {
         log.error("ResourceConflictException with message: {}", exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error(exception.getMessage()));
-    }
-
-    @ExceptionHandler(exception = ResourceAccessDeniedException.class)
-    public ResponseEntity<ApiResponse<?>> handleResourceAccessDeniedException(ResourceAccessDeniedException exception) {
-        log.error("ResourceAccessDeniedException with message: {}", exception.getMessage());
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ApiResponse.error(exception.getMessage()));
     }
 
